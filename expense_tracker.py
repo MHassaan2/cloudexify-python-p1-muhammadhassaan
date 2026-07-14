@@ -2,7 +2,7 @@
 import os
 import csv
 from datetime import datetime
-from colorama import Fore,Style,init
+from colorama import Fore,init
 init(autoreset=True)
 
 # Set the base directory for the application
