@@ -106,15 +106,9 @@ python expense_tracker.py
 
 # 📸 Screenshots
 
-## 🏠 Main Menu
-
-![](screenshots/main_menu.png)
-
----
-
-## 📊 Expense List
-
-![](screenshots/expenses.png)
+| 🏠 Main Menu | 📊 Expense List |
+|---------------|-----------------|
+|![](screen_shots/main_menu.png)|![](screen_shots/Expenses.png)|
 
 ---
 
