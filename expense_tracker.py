@@ -2,6 +2,8 @@
 import os
 import csv
 from datetime import datetime
+from colorama import Fore,Style,init
+init(autoreset=True)
 
 # Set the base directory for the application
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +27,7 @@ categories = [
 
 # _________________________function to display the menu__________________________
 def menu_display():
-    print('----Personal Expense Tracker----')
+    print(Fore.GREEN +'----Personal Expense Tracker----')
     print('select an option:')
     print('1. Add Expense')
     print('2. View Expenses')
@@ -36,7 +38,7 @@ def menu_display():
     print('7. Update Expense')
     print('8. Save Expenses to CSV')
     print('9. Exit')
-    print('--------------------------------')
+    print(Fore.GREEN +'--------------------------------')
     
 # _________________________function to generate a unique ID for each expense__________________________
 def id_generator():
@@ -55,27 +57,27 @@ def add_expense():
         try:
             ammount = float(input('Enter the expense amount: '))
             if ammount < 0:
-                print('Ammount must be greater then 0.')
+                print(Fore.YELLOW +'Ammount must be greater then 0.')
                 continue
             break
         except ValueError:
-            print('Invalid input. Please enter a valid number.')
-    print('Select a category:')
+            print(Fore.RED +'Invalid input. Please enter a valid number.')
+    print(Fore.MAGENTA +'Select a category:')
     count = 1
     for category in categories:
-        print(f'{count}. {category}')
+        print(Fore.CYAN +f'{count}. {category}')
         count += 1
     while True:
         try:
             category_choice = int(input('Enter the category number: '))
             if category_choice < 1 or category_choice > len(categories):
-                print('Invalid choice. Please select a valid category number.')
+                print(Fore.RED +'Invalid choice. Please select a valid category number.')
                 continue
             category = categories[category_choice - 1]
             break
         except ValueError:
-            print('Invalid input. Please enter a valid number.')
-    disciption = input('Enter a description for the expense: ')
+            print(Fore.RED +'Invalid input. Please enter a valid number.')
+    disciption = input(Fore.CYAN +'Enter a description for the expense: ')
     current_time = datetime.now()
     formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')
     expense = {
@@ -87,15 +89,15 @@ def add_expense():
     }
     expenses.append(expense)
     save_data()
-    print('Expense added successfully.')
+    print(Fore.GREEN +'Expense added successfully.')
 
 # _________________________function to view all expenses__________________________
 def view_expenses():
     if not expenses:
-        print('No expenses recorded.')
+        print(Fore.YELLOW +'No expenses recorded.')
         return
     print('='*76)
-    print(f'{"ID":<5}{"Amount":10}{"Category":15}{"Description":25}{"Date/Time":20}')
+    print(Fore.MAGENTA +f'{"ID":<5}{"Amount":10}{"Category":15}{"Description":25}{"Date/Time":20}')
     print('='*76)
     for expense in expenses:
          print(f'{expense["id"]:<5}'
@@ -104,16 +106,16 @@ def view_expenses():
               f'{expense["description"]:<25}'
               f'{expense["date"]:<20}')
 
-    print('=' * 76)
+    print(Fore.MAGENTA +'=' * 76)
         
 # _________________________function to view total expenses__________________________
 def view_total_expenses():
     if len(expenses) == 0:
-        print('No expenses recorded.')
+        print(Fore.YELLOW +'No expenses recorded.')
         return
     total = 0
     print('='*27)
-    print(f'{"ID":<5}{"Amount":10}')
+    print(Fore.MAGENTA +f'{"ID":<5}{"Amount":10}')
     print('='*27)
     for expense in expenses:
         id = expense['id']
@@ -121,17 +123,17 @@ def view_total_expenses():
         total = total + amount
         print(f'{id:<5} : {amount}')
     print(f'Total Expenses: {total}')
-    print('='*27)
+    print(Fore.MAGENTA +'='*27)
 # _________________________function to filter expenses by category__________________________
 
 def filter_expenses_by_category():
     if not expenses:
-        print('No expenses recorded.')
+        print(Fore.YELLOW +'No expenses recorded.')
         return
     category = input('Enter the category to filter by: ').strip().title()
     found = False
     print('='*76)
-    print(f'{"ID":<5}{"Amount":10}{"Category":15}{"Description":25}{"Date/Time":20}')
+    print(Fore.MAGENTA +f'{"ID":<5}{"Amount":10}{"Category":15}{"Description":25}{"Date/Time":20}')
     print('='*76)
     for expense in expenses:
         if expense['category'] == category:
@@ -141,12 +143,15 @@ def filter_expenses_by_category():
               f'{expense["description"]:<25}'
               f'{expense["date"]:<20}')
             found = True
-    print('=' * 76)
+    print(Fore.MAGENTA +'=' * 76)
     if not found:
-        print(f'No expenses found in the "{category}" category.')
+        print(Fore.YELLOW +f'No expenses found in the "{category}" category.')
 
 # _________________________function to display category-wise expense summary__________________________
 def category_wise_summary():
+    if not expenses:
+        print(Fore.YELLOW +'No expenses recorded.')
+        return
     category_totals = {}
     for expense in expenses:
         category = expense['category']
@@ -176,9 +181,9 @@ def load_data():
                 }
                 expenses.append(expense)
     except FileNotFoundError:
-        print('No previous expense data found. Starting fresh.')
+        print(Fore.YELLOW +'No previous expense data found. Starting fresh.')
     except Exception as e:
-        print(f'Error occurred while loading data: {e}')
+        print(Fore.RED +f'Error occurred while loading data: {e}')
 
 # _________________________function to save expenses to a file__________________________
 def save_data():
@@ -193,12 +198,12 @@ def save_data():
                 line = f'{id},{amount},{category},{description},{date_time}\n'
                 file.write(line)
     except Exception as e:
-        print(f'Error occurred while saving data: {e}')
+        print(Fore.RED +f'Error occurred while saving data: {e}')
 
 # _________________________function to delete an expense by ID__________________________
 def delete_expense():
     if not expenses:
-        print('No expenses recorded.')
+        print(Fore.YELLOW +'No expenses recorded.')
         return
     try:
         expense_id = int(input('Enter the ID of the expense to delete: '))
@@ -207,15 +212,15 @@ def delete_expense():
             if expense['id'] == expense_id:
                 expenses.remove(expense)
                 save_data()
-                print(f'Expense with ID {expense_id} deleted successfully.')
+                print(Fore.GREEN +f'Expense with ID {expense_id} deleted successfully.')
                 found = True
                 break
         if not found:
-            print(f'Expense with ID {expense_id} not found.')
+            print(Fore.YELLOW +f'Expense with ID {expense_id} not found.')
     except ValueError:
-        print('Invalid input. Please enter a valid number.')
+        print(Fore.RED +'Invalid input. Please enter a valid number.')
     except Exception as e:
-        print(f'Error occurred while deleting expense: {e}')
+        print(Fore.RED +f'Error occurred while deleting expense: {e}')
 
 # _________________________function to save expenses to a CSV__________________________
 def save_data_csv():
@@ -232,23 +237,23 @@ def save_data_csv():
                 line = [id, amount, category, description, date_time]
                 writer.writerow(line)
     except Exception as e:
-        print(f'Error occurred while saving data: {e}')
+        print(Fore.RED +f'Error occurred while saving data: {e}')
 
 # _________________________function to update an expense by ID__________________________
 def update_expense():
     if not expenses:
-        print('No expenses recorded.')
+        print(Fore.YELLOW +'No expenses recorded.')
         return
     try:
-        print('='*28,'Availible Expenses','='*28)
+        print(Fore.MAGENTA +'='*28,'Availible Expenses','='*28)
         view_expenses()
         expense_id = int(input('Enter the ID of the expense to update: '))
         found = False
         for expense in expenses:
             if expense['id'] == expense_id:
                 found = True
-                print('----Update Expense----')
-                print('Select the field to update:')
+                print(Fore.GREEN +'----Update Expense----')
+                print(Fore.CYAN +'Select the field to update:')
                 print('1. Amount')
                 print('2. Category')
                 print('3. Description')
@@ -260,45 +265,45 @@ def update_expense():
                         try:
                             new_amount = float(input('Enter the new amount: '))
                             if new_amount <= 0:
-                                print('Amount must be greater than 0.')
+                                print(Fore.RED +'Amount must be greater than 0.')
                                 continue
                             expense['amount'] = new_amount
                             save_data()
-                            print('Expense updated successfully.')
+                            print(Fore.GREEN +'Expense updated successfully.')
                             break
                         except ValueError:
-                            print('Invalid input. Please enter a valid number.')
+                            print(Fore.RED +'Invalid input. Please enter a valid number.')
                         return
                 # Update category
                 elif choice == '2':
                     while True:
                         new_category = input('Enter the new category: ').strip().title()
                         if new_category not in categories:
-                            print('Invalid category. Please choose from the following:\n' 
+                            print(Fore.RED +'Invalid category. Please choose from the following:\n' 
                                   f'{", ".join(categories)}')
                             continue
                         expense['category'] = new_category
                         save_data()
-                        print('Expense updated successfully.')
+                        print(Fore.GREEN +'Expense updated successfully.')
                         return
                 # update description
                 elif choice == '3':
                     new_description = input('Enter the new description: ')
                     expense['description'] = new_description
                     save_data()
-                    print('Expense updated successfully.')
+                    print(Fore.GREEN +'Expense updated successfully.')
                     return
                 # Cancel
                 elif choice == '4':
                     return
                 else:
-                    print('Invalid choice. Please enter a number between 1 and 4.')
+                    print(Fore.RED +'Invalid choice. Please enter a number between 1 and 4.')
         if not found:
-            print(f'Expense with ID {expense_id} not found.')
+            print(Fore.YELLOW +f'Expense with ID {expense_id} not found.')
     except ValueError:
-        print('Invalid input. Please enter a valid number.')
+        print(Fore.RED +'Invalid input. Please enter a valid number.')
     except Exception as e:
-        print(f'Error occurred while updating expense: {e}')
+        print(Fore.RED +f'Error occurred while updating expense: {e}')
 
 
 # _________________________main function to run the program__________________________
@@ -314,7 +319,7 @@ def main():
             if choice == 1:
                 a = ''
                 while True:
-                    print('----Add Expense----')
+                    print(Fore.MAGENTA +'----Add Expense----')
                     add_expense()
                     a = input('Enter "e" to exit or any other key to add another expense: ')    
                     if a == 'e':
@@ -322,28 +327,28 @@ def main():
             
             # View Expenses
             elif choice == 2:
-                    print('----View Expenses----')
+                    print(Fore.MAGENTA +'----View Expenses----')
                     view_expenses()
             
             # View Total Expenses
             elif choice == 3:
-                    print('----View Total Expenses----')
+                    print(Fore.MAGENTA +'----View Total Expenses----')
                     view_total_expenses()
             
             # Filter Expenses by Category
             elif choice == 4:
-                    print('----Filter Expenses by Category----')
+                    print(Fore.MAGENTA +'----Filter Expenses by Category----')
                     filter_expenses_by_category()
             
             # Category-wise Expense Summary
             elif choice == 5:
-                    print('----Category-wise Expense Summary----')
+                    print(Fore.MAGENTA +'----Category-wise Expense Summary----')
                     category_wise_summary()
             
             # Delete Expense
             elif choice == 6:
                     while True:
-                        print('----Delete Expense----')
+                        print(Fore.MAGENTA +'----Delete Expense----')
                         delete_expense()
                         a = input('Enter "e" to exit or any other key to delete another expense: ')    
                         if a == 'e':
@@ -352,24 +357,23 @@ def main():
             # Update Expense
             elif choice == 7:
                     while True:
-                        print('----Update Expense----')
+                        print(Fore.MAGENTA +'----Update Expense----')
                         update_expense()
                         break
             
             # Export to CSV
             elif choice == 8:
-                print('----Export to CSV----')
                 save_data_csv()
-                print('Expenses exported to CSV successfully.')
+                print(Fore.GREEN +'Expenses exported to CSV successfully.')
             
             # Exit
             elif choice == 9:
-                print('Exiting the program.')
+                print(Fore.GREEN +'Exiting the program.')
                 break
             else:
-                print('Feature is under development. Please select another option.')
+                print(Fore.YELLOW +'Feature is under development. Please select another option.')
         except ValueError:
-            print('Invalid input. Please enter a number between 1 and 8.')
+            print(Fore.RED +'Invalid input. Please enter a number between 1 and 8.')
 
 if __name__ == '__main__':
     main()
