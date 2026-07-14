@@ -53,6 +53,7 @@ The application supports:
 - ⚠️ Input Validation
 - 🛡️ Exception Handling
 - 📑 Formatted Table Output
+- 🎨 Color the output using colorama library
 
 ---
 
