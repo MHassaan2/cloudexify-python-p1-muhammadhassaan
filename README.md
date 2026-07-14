@@ -14,7 +14,7 @@ A simple, efficient, and user-friendly **console-based Expense Tracker** develop
 
 **Name:** Muhammad Hassaan
 
-**Registration Number:** CX-2026-PY-0277
+**Registration Number:** CX-INT-2026-PY-0277
 
 **Internship:** CloudExify Python Internship 2026
 
